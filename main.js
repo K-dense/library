@@ -3,10 +3,6 @@ const addBookForm = document.querySelector('.add-book-form_container');
 const closeForm = document.querySelector('#close-form');
 const table = document.querySelector('tbody');
 
-const form  = document.querySelector('#book-form');
-const formTitle = document.querySelector('#title');
-const formAuthor = document.querySelector('#author');
-const formPages = document.querySelector('#pages');
 const formSubmit = document.querySelector('#submit');
 
 let myLibrary = [];
@@ -25,32 +21,59 @@ class Book {
   }
 }
 
+// Create table row and data for new book added
+function createTableRow() {
+  const buttonRead = document.createElement('button');
+  const buttonRemove = document.createElement('button');
+
+  buttonRead.innerText = 'Read';
+  buttonRemove.innerText = 'Remove';
+
+  const row = table.insertRow(1);
+  const cell1 = row.insertCell(0);
+  const cell2 = row.insertCell(1);
+  const cell3 = row.insertCell(2);
+  const cell4 = row.insertCell(3);
+  const cell5 = row.insertCell(4);
+
+  cell1.innerHTML = myLibrary[0].title;
+  cell2.innerHTML = myLibrary[0].author;
+  cell3.innerHTML = myLibrary[0].pages;
+  cell4.appendChild(buttonRead);
+  cell5.appendChild(buttonRemove);
+}
+
 // Push new book to myLibrary array
 function addBookToLibrary(title, author, numPage) {
   const newBook = new Book(title, author, numPage);
-  myLibrary.push(newBook);
+  return myLibrary.unshift(newBook);
 }
 
-// Create table row and data for new book added
-function createTableRow() {
-  const newTr = document.createElement('tr');
-  const newTd = document.createElement('td');
-  const currentRow = table.appendChild(newTr);
+// Handler functions
 
-  currentRow.appendChild(newTd);
-  currentRow.appendChild(newTd);
-  currentRow.appendChild(newTd);
-}
-
-addBookBtn.addEventListener('click', e => {
+function toggleClass(e) {
   e.stopPropagation();
   addBookForm.classList.toggle('hidden')
-})
+}
 
-closeForm.addEventListener('click', e => {
-  e.stopPropagation();
+function handler() {
+  let titleInput = document.getElementById('title');
+  let titleOutput = titleInput.value;
+
+  let authorInput = document.getElementById('author');
+  let authorOutput = authorInput.value;
+
+  let pagesInput = document.getElementById('pages');
+  let pagesOutput = pagesInput.value;
+
+  addBookToLibrary(titleOutput, authorOutput, pagesOutput);
+  createTableRow();
   addBookForm.classList.toggle('hidden');
-})
+}
+
+// Event Listeners
+addBookBtn.addEventListener('click', toggleClass)
+closeForm.addEventListener('click', toggleClass)
 
 addBookForm.addEventListener('click', e => {
   e.stopPropagation();
@@ -62,6 +85,4 @@ document.body.addEventListener('click', () => {
   }
 })
 
-form.addEventListener('submit', () => {
-  addBookToLibrary();
-});
+formSubmit.addEventListener('click', handler);
