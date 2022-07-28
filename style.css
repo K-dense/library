@@ -52,3 +52,8 @@ td, th {
 .hidden {
   display: none;
 }
+
+.radio-container {
+  display: flex;
+  flex-direction: column;
+}

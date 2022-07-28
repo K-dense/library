@@ -10,16 +10,33 @@ let myLibrary = [];
 // Constructor Function
 
 class Book {
-  constructor(title, author, numberPages) {
-    this.title = title
-    this.author = author
-    this.pages = numberPages
+  constructor(title, author, numberPages, isRead) {
+    this.title = title;
+    this.author = author;
+    this.pages = numberPages;
+    this.isRead = isRead;
   }
 
   log() {
-    return `${this.title} by ${this.author}, ${this.pages} pages`
+    return `${this.title} by ${this.author}, ${this.pages} pages`;
   }
 }
+
+class Library {
+  constructor() {
+    this.books = [];
+  }
+  addBook(newBook) {
+    this.books.push(newBook);
+    console.log(this.books);
+  }
+
+  deleteBook(title) {
+    this.books = this.books.filter((book) => book.title !== title);
+  }
+}
+
+const library = new Library();
 
 // Create table row and data for new book added
 function createTableRow() {
@@ -36,53 +53,74 @@ function createTableRow() {
   const cell4 = row.insertCell(3);
   const cell5 = row.insertCell(4);
 
-  cell1.innerHTML = myLibrary[0].title;
-  cell2.innerHTML = myLibrary[0].author;
-  cell3.innerHTML = myLibrary[0].pages;
+  cell1.innerHTML = library.books[library.books.length - 1].title;
+  cell2.innerHTML = library.books[library.books.length - 1].author;
+  cell3.innerHTML = library.books[library.books.length - 1].pages;
   cell4.appendChild(buttonRead);
   cell5.appendChild(buttonRemove);
+
+  buttonRemove.onclick = removeBook;
 }
 
-// Push new book to myLibrary array
-function addBookToLibrary(title, author, numPage) {
-  const newBook = new Book(title, author, numPage);
-  return myLibrary.unshift(newBook);
+// Get a new book from User Input
+function newBookFromInput() {
+  const titleInput = document.getElementById('title').value;
+  const authorInput = document.getElementById('author').value;
+  const pagesInput = document.getElementById('pages').value;
+  const radioButtons = document.querySelectorAll('input[name="is-read"]');
+
+  let isReadInput;
+  for (const radioButton of radioButtons) {
+    if (radioButton.checked) {
+      isReadInput = radioButton.value;
+    }
+  }
+
+  return new Book(titleInput, authorInput, pagesInput, isReadInput)
+}
+
+// Add new book from User Input to Library
+function addBook() {
+  const newBook = newBookFromInput()
+  library.addBook(newBook);
 }
 
 // Handler functions
 
 function toggleClass(e) {
   e.stopPropagation();
-  addBookForm.classList.toggle('hidden')
+  addBookForm.classList.toggle('hidden');
 }
 
 function handler() {
-  let titleInput = document.getElementById('title');
-  let titleOutput = titleInput.value;
-
-  let authorInput = document.getElementById('author');
-  let authorOutput = authorInput.value;
-
-  let pagesInput = document.getElementById('pages');
-  let pagesOutput = pagesInput.value;
-
-  addBookToLibrary(titleOutput, authorOutput, pagesOutput);
+  addBook();
   createTableRow();
   addBookForm.classList.toggle('hidden');
 }
 
-// Event Listeners
-addBookBtn.addEventListener('click', toggleClass)
-closeForm.addEventListener('click', toggleClass)
+// Delete book from library
 
-addBookForm.addEventListener('click', e => {
+const removeBook = (e) => {
+  const title = e.target.parentNode.parentNode.firstChild.innerHTML.replaceAll(
+    '"',
+    ''
+  )
+  library.deleteBook(title)
+  console.log(library.books);
+}
+
+// Event Listeners
+addBookBtn.addEventListener('click', toggleClass);
+closeForm.addEventListener('click', toggleClass);
+
+addBookForm.addEventListener('click', (e) => {
   e.stopPropagation();
-})
+});
 
 document.body.addEventListener('click', () => {
   if (!addBookForm.classList.contains('hidden')) {
-     addBookForm.classList.add('hidden');
+    addBookForm.classList.add('hidden');
   }
-})
+});
 
 formSubmit.addEventListener('click', handler);
