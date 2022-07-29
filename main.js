@@ -1,11 +1,10 @@
 const addBookBtn = document.querySelector('.addBook');
 const addBookForm = document.querySelector('.add-book-form_container');
 const closeForm = document.querySelector('#close-form');
-const table = document.querySelector('tbody');
+const table = document.getElementById('table');
+const tableBody = document.querySelector('tbody');
 
 const formSubmit = document.querySelector('#submit');
-
-let myLibrary = [];
 
 // Constructor Function
 
@@ -38,28 +37,39 @@ class Library {
 
 const library = new Library();
 
+const clearTable = () => {
+  table.innerHTML = '';
+
+  const row = table.insertRow(0);
+  const th1 = document.createElement('th');
+  const th2 = document.createElement('th');
+  const th3 = document.createElement('th');
+  row.appendChild(th1).innerHTML = 'Title';
+  row.appendChild(th2).innerHTML = 'Author';
+  row.appendChild(th3).innerHTML = 'Pages';
+};
+
 // Create table row and data for new book added
 function createTableRow() {
-  const buttonRead = document.createElement('button');
-  const buttonRemove = document.createElement('button');
+  clearTable();
 
-  buttonRead.innerText = 'Read';
-  buttonRemove.innerText = 'Remove';
+  for (let i = 0; i <= library.books.length - 1; i++) {
+    const buttonRead = document.createElement('button');
+    const buttonRemove = document.createElement('button');
 
-  const row = table.insertRow(1);
-  const cell1 = row.insertCell(0);
-  const cell2 = row.insertCell(1);
-  const cell3 = row.insertCell(2);
-  const cell4 = row.insertCell(3);
-  const cell5 = row.insertCell(4);
+    buttonRead.innerText = 'Read';
+    buttonRemove.innerText = 'Remove';
 
-  cell1.innerHTML = library.books[library.books.length - 1].title;
-  cell2.innerHTML = library.books[library.books.length - 1].author;
-  cell3.innerHTML = library.books[library.books.length - 1].pages;
-  cell4.appendChild(buttonRead);
-  cell5.appendChild(buttonRemove);
+    const row = table.insertRow(1);
+    let rowIndex = 0;
+    row.insertCell(rowIndex++).innerHTML = library.books[i].title;
+    row.insertCell(rowIndex++).innerHTML = library.books[i].author;
+    row.insertCell(rowIndex++).innerHTML = library.books[i].pages;
+    row.insertCell(rowIndex++).appendChild(buttonRead);
+    row.insertCell(rowIndex++).appendChild(buttonRemove);
 
-  buttonRemove.onclick = removeBook;
+    buttonRemove.onclick = removeBook;
+  }
 }
 
 // Get a new book from User Input
@@ -76,12 +86,12 @@ function newBookFromInput() {
     }
   }
 
-  return new Book(titleInput, authorInput, pagesInput, isReadInput)
+  return new Book(titleInput, authorInput, pagesInput, isReadInput);
 }
 
 // Add new book from User Input to Library
 function addBook() {
-  const newBook = newBookFromInput()
+  const newBook = newBookFromInput();
   library.addBook(newBook);
 }
 
@@ -104,10 +114,12 @@ const removeBook = (e) => {
   const title = e.target.parentNode.parentNode.firstChild.innerHTML.replaceAll(
     '"',
     ''
-  )
-  library.deleteBook(title)
+  );
+  library.deleteBook(title);
+  clearTable();
+  createTableRow();
   console.log(library.books);
-}
+};
 
 // Event Listeners
 addBookBtn.addEventListener('click', toggleClass);
