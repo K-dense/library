@@ -33,6 +33,10 @@ class Library {
   deleteBook(title) {
     this.books = this.books.filter((book) => book.title !== title);
   }
+
+  isInLibrary(newBook) {
+    return this.books.some((book) => book.title === newBook.title);
+  }
 }
 
 const library = new Library();
@@ -57,9 +61,16 @@ function createTableRow() {
     const buttonRead = document.createElement('button');
     const buttonRemove = document.createElement('button');
 
-    buttonRead.innerText = 'Read';
-    buttonRemove.innerText = 'Remove';
+    buttonRead.classList.add('button-read');
+    if(library.books[i].isRead === 'Read') {
+      buttonRead.classList.add('button-read-yes');
+    } else {
+      buttonRead.classList.add('button-read-no');
+    }
 
+    buttonRead.innerText = library.books[i].isRead;
+    buttonRemove.innerText = 'Remove';
+    
     const row = table.insertRow(1);
     let rowIndex = 0;
     row.insertCell(rowIndex++).innerHTML = library.books[i].title;
@@ -68,6 +79,19 @@ function createTableRow() {
     row.insertCell(rowIndex++).appendChild(buttonRead);
     row.insertCell(rowIndex++).appendChild(buttonRemove);
 
+    buttonRead.addEventListener('click', () => {
+      if (library.books[i].isRead === 'Read') {
+        buttonRead.innerText = 'Not Read';
+        buttonRead.classList.toggle('button-read-yes');
+        buttonRead.classList.toggle('button-read-no');
+        library.books[i].isRead = 'Not Read';
+      } else {
+        buttonRead.innerText = 'Read';
+        buttonRead.classList.toggle('button-read-yes');
+        buttonRead.classList.toggle('button-read-no');
+        library.books[i].isRead = 'Read';
+      }
+    });
     buttonRemove.onclick = removeBook;
   }
 }
@@ -92,6 +116,9 @@ function newBookFromInput() {
 // Add new book from User Input to Library
 function addBook() {
   const newBook = newBookFromInput();
+  if (library.isInLibrary(newBook)) {
+    return alert('This book is already in the library');
+  }
   library.addBook(newBook);
 }
 
@@ -118,7 +145,6 @@ const removeBook = (e) => {
   library.deleteBook(title);
   clearTable();
   createTableRow();
-  console.log(library.books);
 };
 
 // Event Listeners
