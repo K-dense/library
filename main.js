@@ -57,11 +57,16 @@ const clearTable = () => {
 function createTableRow() {
   clearTable();
 
+  if (library.books.length === 0) {
+    table.style.display = 'none';
+  }
+
   for (let i = 0; i <= library.books.length - 1; i++) {
     const buttonRead = document.createElement('button');
     const buttonRemove = document.createElement('button');
 
     buttonRead.classList.add('button-read');
+    buttonRemove.classList.add('button-remove');
     if(library.books[i].isRead === 'Read') {
       buttonRead.classList.add('button-read-yes');
     } else {
@@ -78,6 +83,8 @@ function createTableRow() {
     row.insertCell(rowIndex++).innerHTML = library.books[i].pages;
     row.insertCell(rowIndex++).appendChild(buttonRead);
     row.insertCell(rowIndex++).appendChild(buttonRemove);
+
+    table.style.display = 'flex';
 
     buttonRead.addEventListener('click', () => {
       if (library.books[i].isRead === 'Read') {
@@ -130,9 +137,17 @@ function toggleClass(e) {
 }
 
 function handler() {
+  const titleInput = document.getElementById('title');
+  const authorInput = document.getElementById('author');
+  const pagesInput = document.getElementById('pages');
+
   addBook();
   createTableRow();
   addBookForm.classList.toggle('hidden');
+
+  titleInput.value = '';
+  authorInput.value = '';
+  pagesInput.value = '';
 }
 
 // Delete book from library

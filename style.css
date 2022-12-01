@@ -9,6 +9,7 @@
 
 body {
   position: relative;
+  background: url('https://i.pinimg.com/originals/cc/51/3b/cc513b52aed0b7329ef657e153ea0672.jpg');
 }
 
 header {
@@ -16,17 +17,98 @@ header {
   justify-content: center;
   gap: 20vw;
   padding: 50px 0;
+  color: white;
+  background-color: #9eb7bf;
+}
+
+header > h1 {
+  font-size: 4rem;
+}
+
+header > button {
+  background: white;
+  border: 1px solid #a5b1c2;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #111111;
+  display: inline-block;
+  margin: 1rem 0;
+  min-width: 180px;
+  overflow: hidden;
+  padding: 15px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: 0.3s ease-in-out all;
+  font-weight: 500;
+  color: #a5b1c2;
+  font-size: large;
+}
+
+header > button span {
+  position: relative;
+  z-index: 2;
+}
+
+header > button:before {
+  background: linear-gradient(
+    transparent 0%,
+    rgba(255, 255, 255, 0.6) 50%,
+    transparent 100%
+  );
+  content: '';
+  height: 200%;
+  position: absolute;
+  right: calc(100% + 20px);
+  top: -55%;
+  transform: rotate(-70deg);
+  transition: 0.6s ease-in-out right;
+  width: 80px;
+  z-index: 0;
+}
+
+header > button:hover {
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1),
+    inset 0 10px 30px rgba(255, 255, 255, 0.3),
+    inset 0 2px 2px rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+header > button:hover {
+  background: #f5d741;
+  border-color: #f5d741;
+}
+
+header > button:hover:before {
+  right: -100%;
 }
 
 table {
   display: flex;
   justify-content: center;
-  border: 1px solid red;
+  margin-top: 50px;
 }
 
-td, th {
+tr {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 25px 35px 25px 35px;
+  background-color: white;
+  border-radius: 50px;
+  margin-bottom: 5px;
+}
+
+tr:first-child {
+  margin-bottom: 10px;
+  color: white;
+  background-color: #f5d741;
+  text-shadow: 2px 0 #9eb7bf, -2px 0 #9eb7bf, 0 2px #9eb7bf, 0 -2px #9eb7bf, 1px 1px #9eb7bf,
+    -1px -1px #9eb7bf, 1px -1px #9eb7bf, -1px 1px #9eb7bf;
+}
+
+th {
   text-align: left;
-  padding: 15px 25px;
   letter-spacing: 2px;
 }
 
@@ -40,8 +122,7 @@ td, th {
   gap: 20px;
   top: 25vh;
   left: 40vw;
-  border: 1px solid red;
-  background-color: white;
+  background-color: #9eb7bf;
 }
 
 .add-book-form_container > div {
@@ -73,11 +154,13 @@ fieldset {
   flex-direction: column;
 }
 
-.button-read {
+.button-read,
+.button-remove {
   border: none;
   border-radius: 5px;
   padding: 10px;
   width: 100px;
+  cursor: pointer;
 
   transition: all 0.3s ease-in-out;
 }
